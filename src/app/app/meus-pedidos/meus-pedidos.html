@@ -1,1 +1,32 @@
-<p>meus-pedidos works!</p>
+<div class="container my-4">
+    <h2 class="mb-4">Meus Pedidos</h2>
+  
+    <div *ngIf="pedidos.length === 0" class="alert alert-info">
+      Você ainda não realizou nenhum pedido.
+    </div>
+  
+    <div *ngIf="pedidos.length > 0">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Nº do Pedido</th>
+            <th>Data</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidos">
+            <td>#{{ pedido.id }}</td>
+            <td>{{ pedido.data }}</td>
+            <td>R$ {{ pedido.total.toFixed(2) }}</td>
+            <td>
+              <span class="badge" [ngClass]="pedido.status === 'Concluído' ? 'bg-success' : 'bg-warning text-dark'">
+                {{ pedido.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
