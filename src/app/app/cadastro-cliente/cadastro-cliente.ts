@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  imports: [],
   selector: 'app-cadastro-cliente',
-  styleUrl: './cadastro-cliente.css',
+  standalone: true,
   templateUrl: './cadastro-cliente.html',
+  styleUrl: './cadastro-cliente.css'
 })
-export class CadastroCliente {}
+export class CadastroClienteComponent { }

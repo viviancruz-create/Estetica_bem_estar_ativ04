@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { CatalogoComponent } from './pages/catalogo/catalogo.component';
-import { CadastroClienteComponent } from './pages/cadastro-cliente/cadastro-cliente.component';
-import { CarrinhoComponent } from './pages/carrinho/carrinho.component';
-import { MeusPedidosComponent } from './pages/meus-pedidos/meus-pedidos.component';
+import { CatalogoComponent } from './app/catalogo/catalogo';
+import { CadastroClienteComponent } from './app/cadastro-cliente/cadastro-cliente';
+import { CarrinhoComponent } from './app/carrinho/carrinho';
+import { MeusPedidosComponent } from './app/meus-pedidos/meus-pedidos';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'catalogo', pathMatch: 'full' },
