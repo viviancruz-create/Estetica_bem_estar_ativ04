@@ -1,1 +1,18 @@
-<router-outlet></router-outlet>
+<nav class="navbar navbar-expand-lg mb-4" style="background-color: var(--rosa-principal);">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-white" routerLink="/catalogo">
+        Maravilhosas Estética
+      </a>
+  
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link text-white fw-medium" routerLink="/catalogo">Catálogo</a>
+        <a class="nav-link text-white fw-medium" routerLink="/carrinho">Carrinho</a>
+        <a class="nav-link text-white fw-medium" routerLink="/cadastro-cliente">Cadastro</a>
+        <a class="nav-link text-white fw-medium" routerLink="/meus-pedidos">Meus Pedidos</a>
+      </div>
+    </div>
+  </nav>
+  
+  <main class="container">
+    <router-outlet></router-outlet>
+  </main>

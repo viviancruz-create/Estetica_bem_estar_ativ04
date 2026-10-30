@@ -4,8 +4,8 @@ export interface ItemCarrinho {
   id: number;
   nome: string;
   preco: number;
-  tipo: 'produto' | 'servico';
   quantidade: number;
+  tipo: 'produto' | 'servico';
 }
 
 @Injectable({
@@ -18,7 +18,7 @@ export class CarrinhoService {
     return this.itens;
   }
 
-  adicionarItem(item: Omit<ItemCarrinho, 'quantidade'>): void {
+  adicionarItem(item: ItemCarrinho): void {
     const itemExistente = this.itens.find(i => i.id === item.id && i.tipo === item.tipo);
     if (itemExistente) {
       itemExistente.quantidade += 1;
@@ -31,11 +31,11 @@ export class CarrinhoService {
     this.itens = this.itens.filter(i => !(i.id === id && i.tipo === tipo));
   }
 
-  limparCarrinho(): void {
-    this.itens = [];
+  getTotal(): number {
+    return this.itens.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
   }
 
-  getTotal(): number {
-    return this.itens.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+  limparCarrinho(): void {
+    this.itens = [];
   }
 }

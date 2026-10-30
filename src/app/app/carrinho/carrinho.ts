@@ -8,7 +8,7 @@ import { CarrinhoService, ItemCarrinho } from '../../services/carrinho';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './carrinho.html',
-  styleUrl: './carrinho.css'
+  styleUrls: ['./carrinho.css'] // <-- Corrigido para styleUrls
 })
 export class CarrinhoComponent implements OnInit {
   itens: ItemCarrinho[] = [];

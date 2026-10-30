@@ -1,0 +1,34 @@
+.table {
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .table th {
+    background-color: var(--verde-suave);
+    color: var(--verde-escuro);
+    font-weight: 600;
+    border-bottom: 2px solid var(--verde-oliva);
+  }
+  
+  .table td {
+    vertical-align: middle;
+  }
+  
+  .badge {
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .bg-success {
+    background-color: var(--verde-oliva) !important;
+    color: #ffffff !important;
+  }
+  
+  .bg-warning {
+    background-color: var(--rosa-claro) !important;
+    color: var(--verde-escuro) !important;
+  }

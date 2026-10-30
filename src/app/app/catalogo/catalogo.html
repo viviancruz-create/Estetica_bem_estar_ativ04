@@ -1,36 +1,48 @@
 <div class="container my-4">
-    <h1 class="text-center mb-4">Catálogo de Estética & Bem-Estar</h1>
-  
-    <section class="mb-5">
-      <h2>Produtos</h2>
-      <div class="row">
-        <div class="col-md-4 mb-3" *ngFor="let p of produtos">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">{{ p.nome }}</h5>
-              <p class="card-text">{{ p.descricao }}</p>
-              <p class="fw-bold">R$ {{ p.preco.toFixed(2) }}</p>
-              <button class="btn btn-primary w-100">Adicionar ao Carrinho</button>
-            </div>
+  <h1 class="text-center mb-4">Maravilhosas Estética & Bem-Estar</h1>
+
+  <!-- Seção de Produtos -->
+  <section class="mb-5">
+    <h2>Produtos</h2>
+    <div class="row">
+      <!-- O 'p' só existe DENTRO dessa div que tem o *ngFor -->
+      <div class="col-md-4 mb-3" *ngFor="let p of produtos">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ p.nome }}</h5>
+            <p class="card-text">{{ p.descricao }}</p>
+            <p class="fw-bold">R$ {{ p.preco.toFixed(2) }}</p>
+
+            <!-- O (click)="adicionarProduto(p)" precisa ficar AQUI DENTRO -->
+            <button class="btn btn-primary w-100" (click)="adicionarProduto(p)">
+              Adicionar ao Carrinho
+            </button>
           </div>
         </div>
       </div>
-    </section>
-  
-    <section>
-      <h2>Serviços</h2>
-      <div class="row">
-        <div class="col-md-4 mb-3" *ngFor="let s of servicos">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">{{ s.nome }}</h5>
-              <p class="card-text">{{ s.descricao }}</p>
-              <p class="text-muted">Duração: {{ s.duracaoMinutos }} minutos</p>
-              <p class="fw-bold">R$ {{ s.preco.toFixed(2) }}</p>
-              <button class="btn btn-success w-100">Agendar / Adicionar</button>
-            </div>
+    </div>
+  </section>
+
+  <!-- Seção de Serviços -->
+  <section>
+    <h2>Serviços</h2>
+    <div class="row">
+      <!-- O 's' só existe DENTRO dessa div que tem o *ngFor -->
+      <div class="col-md-4 mb-3" *ngFor="let s of servicos">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ s.nome }}</h5>
+            <p class="card-text">{{ s.descricao }}</p>
+            <p class="text-muted">Duração: {{ s.duracaoMinutos }} minutos</p>
+            <p class="fw-bold">R$ {{ s.preco.toFixed(2) }}</p>
+
+            <!-- O (click)="adicionarServico(s)" precisa ficar AQUI DENTRO -->
+            <button class="btn btn-success w-100" (click)="adicionarServico(s)">
+              Agendar / Adicionar
+            </button>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+</div>
