@@ -1,48 +1,43 @@
 <div class="container my-4">
-  <h1 class="text-center mb-4">Maravilhosas Estética & Bem-Estar</h1>
+  <h2 class="text-center mb-4" style="color: var(--verde-escuro);">Nosso Catálogo</h2>
 
   <!-- Seção de Produtos -->
-  <section class="mb-5">
-    <h2>Produtos</h2>
-    <div class="row">
-      <!-- O 'p' só existe DENTRO dessa div que tem o *ngFor -->
-      <div class="col-md-4 mb-3" *ngFor="let p of produtos">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">{{ p.nome }}</h5>
-            <p class="card-text">{{ p.descricao }}</p>
-            <p class="fw-bold">R$ {{ p.preco.toFixed(2) }}</p>
-
-            <!-- O (click)="adicionarProduto(p)" precisa ficar AQUI DENTRO -->
-            <button class="btn btn-primary w-100" (click)="adicionarProduto(p)">
-              Adicionar ao Carrinho
-            </button>
-          </div>
+  <h3 class="mb-3" style="color: var(--rosa-escuro);">Produtos</h3>
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let p of produtos">
+      <div class="card h-100 shadow-sm border-0" style="background-color: var(--creme-suave);">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold" style="color: var(--verde-escuro);">
+            {{ p.iditemNavigation?.item1 || 'Produto' }}
+          </h5>
+          <p class="card-text text-muted">
+            {{ p.iditemNavigation?.descricaoItem || 'Sem descrição cadastrada' }}
+          </p>
+          <p class="fw-bold fs-5 mt-auto text-success">
+            R$ {{ (p.precoVenda || p.iditemNavigation?.preco || 0).toFixed(2) }}
+          </p>
+          <button class="btn text-white w-100 fw-bold mt-2" style="background-color: var(--rosa-principal);" (click)="adicionarProduto(p)">
+            Adicionar ao Carrinho
+          </button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- Seção de Serviços -->
-  <section>
-    <h2>Serviços</h2>
-    <div class="row">
-      <!-- O 's' só existe DENTRO dessa div que tem o *ngFor -->
-      <div class="col-md-4 mb-3" *ngFor="let s of servicos">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">{{ s.nome }}</h5>
-            <p class="card-text">{{ s.descricao }}</p>
-            <p class="text-muted">Duração: {{ s.duracaoMinutos }} minutos</p>
-            <p class="fw-bold">R$ {{ s.preco.toFixed(2) }}</p>
-
-            <!-- O (click)="adicionarServico(s)" precisa ficar AQUI DENTRO -->
-            <button class="btn btn-success w-100" (click)="adicionarServico(s)">
-              Agendar / Adicionar
-            </button>
-          </div>
+  <h3 class="my-3" style="color: var(--rosa-escuro);">Serviços</h3>
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let s of servicos">
+      <div class="card h-100 shadow-sm border-0" style="background-color: var(--creme-suave);">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold" style="color: var(--verde-escuro);">{{ s.nome }}</h5>
+          <p class="card-text text-muted">{{ s.descricao }}</p>
+          <p class="fw-bold fs-5 mt-auto text-success">R$ {{ s.preco.toFixed(2) }}</p>
+          <button class="btn text-white w-100 fw-bold mt-2" style="background-color: var(--verde-oliva);" (click)="adicionarServico(s)">
+            Agendar / Adicionar
+          </button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </div>

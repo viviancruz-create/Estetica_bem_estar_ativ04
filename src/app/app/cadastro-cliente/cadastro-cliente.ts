@@ -15,7 +15,7 @@ export class CadastroClienteComponent {
     nome: '',
     email: '',
     telefone: '',
-    endereco: ''
+    cep: ''
   };
 
   constructor(private router: Router) {}

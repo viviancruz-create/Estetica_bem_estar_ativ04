@@ -1,1 +1,88 @@
-<p>crud-produtos works!</p>
+<div class="container my-4">
+    <h2 class="text-center mb-4 text-verde fw-bold">Cadastro e Gestão de Produtos</h2>
+  
+    <!-- Card do Formulário -->
+    <div class="card p-4 shadow-sm mb-5 border-0 bg-card-custom">
+      <h4 class="mb-3 text-rosa fw-semibold">
+        {{ editandoId ? 'Editar Produto #' + editandoId : 'Cadastrar Novo Produto' }}
+      </h4>
+  
+      <form (ngSubmit)="salvar()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Nome do Item:</label>
+            <input type="text" class="form-control" [(ngModel)]="form.item" name="item" required placeholder="Ex: Creme Facial Hidratante">
+          </div>
+  
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Descrição:</label>
+            <input type="text" class="form-control" [(ngModel)]="form.descricaoItem" name="descricaoItem" required placeholder="Ex: Uso diário com filtro UV">
+          </div>
+  
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Preço de Custo (R$):</label>
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="form.preco" name="preco" required>
+          </div>
+  
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Preço de Venda (R$):</label>
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="form.precoVenda" name="precoVenda" required>
+          </div>
+  
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Código do Preço/Venda:</label>
+            <input type="text" class="form-control" [(ngModel)]="form.codigoVenda" name="codigoVenda" placeholder="Ex: PROD01">
+          </div>
+  
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Unidade:</label>
+            <input type="text" class="form-control" [(ngModel)]="form.unidade" name="unidade" placeholder="UN, ML, L, etc.">
+          </div>
+        </div>
+  
+        <div class="mt-4 d-flex gap-2">
+          <button type="submit" class="btn text-white fw-bold px-4" style="background-color: var(--rosa-principal);">
+            {{ editandoId ? 'Atualizar Produto' : 'Salvar Produto' }}
+          </button>
+          <button type="button" class="btn btn-secondary px-4" *ngIf="editandoId" (click)="cancelarEdicao()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Tabela de Listagem -->
+    <h4 class="mb-3 text-verde fw-semibold">Produtos Cadastrados</h4>
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-hover align-middle mb-0 bg-white">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Preço Custo</th>
+            <th>Preço Venda</th>
+            <th>Unidade</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of produtos">
+            <td class="fw-bold">#{{ p.iditem }}</td>
+            <td>{{ p.iditemNavigation?.item1 }}</td>
+            <td>{{ p.iditemNavigation?.descricaoItem }}</td>
+            <td>R$ {{ (p.iditemNavigation?.preco || 0).toFixed(2) }}</td>
+            <td class="fw-bold text-success">R$ {{ (p.precoVenda || 0).toFixed(2) }}</td>
+            <td>{{ p.unidade }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-warning me-2" (click)="editar(p)">Editar</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="excluir(p.iditem)">Excluir</button>
+            </td>
+          </tr>
+          <tr *ngIf="produtos.length === 0">
+            <td colspan="7" class="text-center py-4 text-muted">Nenhum produto cadastrado no momento.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

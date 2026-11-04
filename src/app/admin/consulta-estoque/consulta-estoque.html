@@ -1,1 +1,60 @@
-<p>consulta-estoque works!</p>
+<div class="container my-4">
+    <h2 class="text-center mb-4 text-verde">Consulta de Estoque</h2>
+  
+    <!-- Barra de Pesquisa e Filtros -->
+    <div class="card p-3 mb-4 shadow-sm border-0">
+      <div class="row g-3">
+        <div class="col-md-8">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Pesquisar por nome do produto ou ID..." 
+            [(ngModel)]="filtro" 
+            (input)="filtrarEstoque()"
+          >
+        </div>
+        <div class="col-md-4">
+          <button class="btn w-100 fw-bold text-white" style="background-color: var(--verde-oliva);" (click)="carregarEstoque()">
+            Atualizar Estoque
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mensagem se não houver registros -->
+    <div *ngIf="estoqueFiltrado.length === 0" class="alert text-center p-4 shadow-sm" style="background-color: var(--rosa-claro); color: var(--verde-escuro); border-radius: 12px;">
+      <h5>Nenhum produto encontrado no estoque.</h5>
+    </div>
+  
+    <!-- Tabela de Consulta -->
+    <div *ngIf="estoqueFiltrado.length > 0" class="table-responsive shadow-sm rounded">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>ID Item</th>
+            <th>Produto</th>
+            <th>Quantidade Atual</th>
+            <th>Quantidade Mínima</th>
+            <th class="text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of estoqueFiltrado">
+            <td class="fw-semibold">#{{ item.iditem }}</td>
+            <td>{{ item.nomeProduto || item.iditemNavigation?.item1 || 'Produto' }}</td>
+            <td class="fw-bold">{{ item.quantidade }}</td>
+            <td>{{ item.quantidadeMinima || 5 }}</td>
+            <td class="text-center">
+              <span class="badge" [ngClass]="{
+                'badge-sucesso': item.quantidade > 5,
+                'badge-alerta': item.quantidade > 0 && item.quantidade <= 5,
+                'badge-perigo': item.quantidade === 0
+              }">
+                {{ item.quantidade === 0 ? 'Esgotado' : (item.quantidade <= 5 ? 'Baixo' : 'Disponível') }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

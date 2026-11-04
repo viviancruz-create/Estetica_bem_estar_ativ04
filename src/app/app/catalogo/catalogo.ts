@@ -22,19 +22,39 @@ export class CatalogoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.produtos = this.produtoService.getProdutos();
-    this.servicos = this.servicoService.getServicos();
+    // Busca produtos do backend
+    this.produtoService.getProdutos().subscribe({
+      next: (dados: Produto[]) => {
+        this.produtos = dados;
+      },
+      error: (erro: any) => {
+        console.error('Erro ao carregar produtos:', erro);
+      }
+    });
+
+    // CORREÇÃO AQUI: Inscreve no Observable do serviço de serviços
+    this.servicoService.getServicos().subscribe({
+      next: (dados: Servico[]) => {
+        this.servicos = dados;
+      },
+      error: (erro: any) => {
+        console.error('Erro ao carregar serviços:', erro);
+      }
+    });
   }
 
   adicionarProduto(p: Produto): void {
+    const nomeProduto = p.iditemNavigation?.item1 || 'Produto';
+    const precoProduto = p.precoVenda || p.iditemNavigation?.preco || 0;
+
     this.carrinhoService.adicionarItem({
-      id: p.id,
-      nome: p.nome,
-      preco: p.preco,
+      id: p.iditem,
+      nome: nomeProduto,
+      preco: precoProduto,
       quantidade: 1,
       tipo: 'produto'
     });
-    alert(`${p.nome} adicionado ao carrinho!`);
+    alert(`${nomeProduto} adicionado ao carrinho!`);
   }
 
   adicionarServico(s: Servico): void {
