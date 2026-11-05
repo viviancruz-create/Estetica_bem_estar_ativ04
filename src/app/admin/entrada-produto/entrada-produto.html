@@ -1,1 +1,98 @@
-<p>entrada-produto works!</p>
+<div class="container my-4">
+    <h2 class="text-center mb-4 text-verde fw-bold">Entrada de Produtos no Estoque</h2>
+  
+    <!-- Formulário de Lançamento de Entrada -->
+    <div class="card p-4 shadow-sm mb-5 border-0 bg-card-custom">
+      <h4 class="mb-3 text-rosa fw-semibold">Registrar Nova Entrada</h4>
+  
+      <form (ngSubmit)="salvarEntrada()">
+        <div class="row g-3">
+          <!-- Seleção do Produto -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Selecione o Produto:</label>
+            <select 
+              class="form-select" 
+              [(ngModel)]="form.iditem" 
+              name="iditem" 
+              (change)="aoSelecionarProduto()" 
+              required>
+              <option [value]="0" disabled>-- Escolha um produto --</option>
+              <option *ngFor="let p of produtos" [value]="p.iditem">
+                #{{ p.iditem }} - {{ p.iditemNavigation?.item1 || 'Produto' }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- Quantidade Adicionada -->
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Quantidade Recebida:</label>
+            <input 
+              type="number" 
+              min="1" 
+              class="form-control" 
+              [(ngModel)]="form.quantidade" 
+              name="quantidade" 
+              required>
+          </div>
+  
+          <!-- Preço de Custo Unitário -->
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Preço de Custo (R$):</label>
+            <input 
+              type="number" 
+              step="0.01" 
+              class="form-control" 
+              [(ngModel)]="form.precoCusto" 
+              name="precoCusto">
+          </div>
+  
+          <!-- Observação / Nota Fiscal -->
+          <div class="col-12">
+            <label class="form-label fw-bold">Observação / Nº Lote / NF:</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="form.observacao" 
+              name="observacao" 
+              placeholder="Ex: Nota Fiscal #45021 - Lote 90B">
+          </div>
+        </div>
+  
+        <div class="mt-4">
+          <button type="submit" class="btn text-white fw-bold px-4" style="background-color: var(--verde-oliva);">
+            Confirmar Entrada
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Tabela com Histórico de Entradas -->
+    <h4 class="mb-3 text-verde fw-semibold">Histórico Recente de Entradas</h4>
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-hover align-middle mb-0 bg-white">
+        <thead>
+          <tr>
+            <th>ID Produto</th>
+            <th>Produto</th>
+            <th>Qtd Entrada</th>
+            <th>Custo Unit.</th>
+            <th>Data / Hora</th>
+            <th>Observação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let h of historico">
+            <td class="fw-bold">#{{ h.iditem }}</td>
+            <td>{{ h.nomeProduto || 'Produto' }}</td>
+            <td class="fw-bold text-success">+{{ h.quantidade }}</td>
+            <td>R$ {{ (h.precoCusto || 0).toFixed(2) }}</td>
+            <td>{{ h.dataEntrada | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td class="text-muted">{{ h.observacao || '-' }}</td>
+          </tr>
+          <tr *ngIf="historico.length === 0">
+            <td colspan="6" class="text-center py-4 text-muted">Nenhuma movimentação de entrada registrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

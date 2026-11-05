@@ -23,8 +23,7 @@ export interface ServicoDTO {
   providedIn: 'root'
 })
 export class ServicoService {
-  // Ajuste a porta da API C# se necessário
-  private apiUrl = 'https://localhost:7123/api/Servico';
+  private apiUrl = 'https://localhost:7077/api/Servico';
 
   constructor(private http: HttpClient) {}
 

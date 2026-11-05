@@ -1,1 +1,86 @@
-<p>pedidos-aberto works!</p>
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-verde fw-bold m-0">Gestão de Pedidos em Aberto</h2>
+      <button class="btn text-white fw-bold" style="background-color: var(--verde-oliva);" (click)="carregarPedidosAbertos()">
+        Atualizar Lista
+      </button>
+    </div>
+  
+    <!-- Estado de Carregamento -->
+    <div *ngIf="carregando" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">A carregar...</span>
+      </div>
+    </div>
+  
+    <!-- Mensagem quando não há pedidos -->
+    <div *ngIf="!carregando && pedidos.length === 0" class="alert text-center p-4 shadow-sm bg-card-custom">
+      <h5 class="text-verde m-0">Não existem pedidos em aberto no momento.</h5>
+    </div>
+  
+    <!-- Tabela de Pedidos -->
+    <div *ngIf="!carregando && pedidos.length > 0" class="table-responsive shadow-sm rounded">
+      <table class="table table-hover align-middle mb-0 bg-white">
+        <thead>
+          <tr>
+            <th>Nº Pedido</th>
+            <th>Cliente</th>
+            <th>Data / Hora</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pedidos">
+            <td class="fw-bold">#{{ p.idpedido }}</td>
+            <td>{{ p.nomeCliente }}</td>
+            <td>{{ p.dataPedido | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td class="fw-bold text-success">R$ {{ (p.valorTotal || 0).toFixed(2) }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'bg-warning text-dark': p.status === 'Pendente',
+                'bg-info text-dark': p.status === 'Em Andamento'
+              }">
+                {{ p.status }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="verDetalhes(p)">Ver Itens</button>
+              <button class="btn btn-sm btn-success me-1" (click)="alterarStatus(p.idpedido, 'Concluido')">Concluir</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="alterarStatus(p.idpedido, 'Cancelado')">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Modal simples para ver detalhes dos itens -->
+  <div *ngIf="pedidoSelecionado" class="modal-backdrop-custom d-flex align-items-center justify-content-center">
+    <div class="card p-4 shadow-lg border-0 modal-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="text-rosa fw-bold m-0">Detalhes do Pedido #{{ pedidoSelecionado.idpedido }}</h4>
+        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+      </div>
+  
+      <p class="mb-1"><strong>Cliente:</strong> {{ pedidoSelecionado.nomeCliente }}</p>
+      <p class="mb-3"><strong>Telefone:</strong> {{ pedidoSelecionado.telefoneCliente || 'Não informado' }}</p>
+  
+      <h5 class="text-verde fw-semibold mb-2">Itens Solicitados:</h5>
+      <ul class="list-group mb-4">
+        <li *ngFor="let item of pedidoSelecionado.itens" class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <span class="badge bg-secondary me-2">{{ item.tipo === 'P' ? 'Produto' : 'Serviço' }}</span>
+            <strong>{{ item.nomeItem }}</strong> (x{{ item.quantidade }})
+          </div>
+          <span class="fw-bold text-muted">R$ {{ (item.precoUnitario * item.quantidade).toFixed(2) }}</span>
+        </li>
+      </ul>
+  
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fs-5 fw-bold text-success">Total: R$ {{ (pedidoSelecionado.valorTotal || 0).toFixed(2) }}</span>
+        <button class="btn btn-secondary" (click)="fecharModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
