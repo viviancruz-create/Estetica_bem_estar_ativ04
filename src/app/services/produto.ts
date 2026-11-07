@@ -39,7 +39,7 @@ export interface ProdutoDTO {
   providedIn: 'root'
 })
 export class ProdutoService {
-  // Confirme se a porta da API no seu Visual Studio é a 7123 ou altere aqui
+ 
   private apiUrl = 'https://localhost:7077/api/ProdutoItem';
 
   constructor(private http: HttpClient) {}

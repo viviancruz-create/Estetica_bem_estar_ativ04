@@ -18,7 +18,8 @@ export class CatalogoComponent implements OnInit {
   constructor(
     private produtoService: ProdutoService,
     private servicoService: ServicoService,
-    private carrinhoService: CarrinhoService
+    private carrinhoService: CarrinhoService,
+
   ) {}
 
   ngOnInit(): void {
@@ -43,20 +44,20 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
-  adicionarProduto(p: Produto): void {
-    const nomeProduto = p.iditemNavigation?.item1 || 'Produto';
-    const precoProduto = p.precoVenda || p.iditemNavigation?.preco || 0;
 
-    this.carrinhoService.adicionarItem({
-      id: p.iditem,
-      nome: nomeProduto,
-      preco: precoProduto,
-      quantidade: 1,
-      tipo: 'produto'
-    });
-    alert(`${nomeProduto} adicionado ao carrinho!`);
+  listacatalago() {
+    this.produtoService.getProdutos()
+      .subscribe({
+        next: (dados) => {
+          console.table(dados)
+        },
+        error: (msgErro) => {
+          console.log("Erro ao listar itens ", msgErro)
+        }
+      })
   }
 
+ 
   adicionarServico(s: Servico): void {
     this.carrinhoService.adicionarItem({
       id: s.id,
