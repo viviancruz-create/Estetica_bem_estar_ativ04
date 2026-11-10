@@ -1,71 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProdutoService, Produto } from '../../services/produto';
-import { ServicoService, Servico } from '../../services/servico';
-import { CarrinhoService } from '../../services/carrinho';
+import { ProdutoService } from '../../services/produto';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './catalogo.html',
-  styleUrls: ['./catalogo.css']
+  styleUrl: './catalogo.css'
 })
 export class CatalogoComponent implements OnInit {
-  produtos: Produto[] = [];
-  servicos: Servico[] = [];
+  produtos: any[] = [];
+  servicos: any[] = [];
 
-  constructor(
-    private produtoService: ProdutoService,
-    private servicoService: ServicoService,
-    private carrinhoService: CarrinhoService,
-
-  ) {}
+  constructor(private produtoService: ProdutoService) {}
 
   ngOnInit(): void {
-    // Busca produtos do backend
-    this.produtoService.getProdutos().subscribe({
-      next: (dados: Produto[]) => {
-        this.produtos = dados;
-      },
-      error: (erro: any) => {
-        console.error('Erro ao carregar produtos:', erro);
-      }
-    });
-
-    // CORREÇÃO AQUI: Inscreve no Observable do serviço de serviços
-    this.servicoService.getServicos().subscribe({
-      next: (dados: Servico[]) => {
-        this.servicos = dados;
-      },
-      error: (erro: any) => {
-        console.error('Erro ao carregar serviços:', erro);
-      }
-    });
+    this.carregarCatalogo();
   }
 
+ // catalogo.ts
+carregarCatalogo(): void {
+  this.produtoService.getProdutos().subscribe({
+    next: (dados) => {
+      console.log('--- DADOS BRUTOS RECEBIDOS DA API ---', dados);
+      
+      this.produtos = dados.filter(x => x.iditemNavigation?.tipoItem === 'P');
+      this.servicos = dados.filter(x => x.iditemNavigation?.tipoItem === 'S');
 
-  listacatalago() {
-    this.produtoService.getProdutos()
-      .subscribe({
-        next: (dados) => {
-          console.table(dados)
-        },
-        error: (msgErro) => {
-          console.log("Erro ao listar itens ", msgErro)
-        }
-      })
+      console.log('Produtos filtrados (P):', this.produtos);
+      console.log('Serviços filtrados (S):', this.servicos);
+    },
+    error: (err) => console.error('Erro ao carregar catálogo:', err)
+  });
+}
+
+  adicionarAoCarrinho(produto: any): void {
+    console.log('Produto adicionado:', produto);
   }
 
- 
-  adicionarServico(s: Servico): void {
-    this.carrinhoService.adicionarItem({
-      id: s.id,
-      nome: s.nome,
-      preco: s.preco,
-      quantidade: 1,
-      tipo: 'servico'
-    });
-    alert(`${s.nome} adicionado ao carrinho!`);
+  agendarServico(servico: any): void {
+    console.log('Serviço agendado:', servico);
+
   }
+
 }

@@ -1,43 +1,46 @@
-<div class="container my-4">
-  <h2 class="text-center mb-4" style="color: var(--verde-escuro);">Nosso Catálogo</h2>
+<div id="div-lista">
+  <h2>Catálogo Maravilhosas Estética</h2>
 
-  <!-- Seção de Produtos -->
-  <h3 class="mb-3" style="color: var(--rosa-escuro);">Produtos</h3>
-  <div class="row">
-    <div class="col-md-4 mb-4" *ngFor="let p of produtos">
-      <div class="card h-100 shadow-sm border-0" style="background-color: var(--creme-suave);">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title fw-bold" style="color: var(--verde-escuro);">
-            {{ p.iditemNavigation?.item1 || 'Produto' }}
-          </h5>
-          <p class="card-text text-muted">
-            {{ p.iditemNavigation?.descricaoItem || 'Sem descrição cadastrada' }}
-          </p>
-          <p class="fw-bold fs-5 mt-auto text-success">
-            R$ {{ (p.precoVenda || p.iditemNavigation?.preco || 0).toFixed(2) }}
-          </p>
-          <button class="btn text-white w-100 fw-bold mt-2" style="background-color: var(--rosa-principal);" (click)="adicionarProduto(p)">
-            Adicionar ao Carrinho
-          </button>
-        </div>
+
+  <h3>Produtos</h3>
+  <div id="lista-produtos">
+    @for (prod of produtos; track prod.iditem) {
+      <div class="item-catalogo">
+        <span class="dados-item">
+          <strong>{{ prod.iditemNavigation?.item1 || 'Produto' }}</strong> - 
+          {{ prod.iditemNavigation?.descricaoItem || 'Sem descrição' }} - 
+          R$ {{ (prod.precoVenda || prod.iditemNavigation?.preco || 0) | number:'1.2-2' }}
+          @if (prod.unidade) { ({{ prod.unidade }}) }
+        </span>
+        <span class="links-lista">
+          <a class="lnk-adicionar" (click)="adicionarAoCarrinho(prod)"> Adicionar </a>
+        </span>
       </div>
-    </div>
+    } @empty {
+      <div class="div-item-vazio">
+        NENHUM PRODUTO NO CATÁLOGO
+      </div>
+    }
   </div>
 
-  <!-- Seção de Serviços -->
-  <h3 class="my-3" style="color: var(--rosa-escuro);">Serviços</h3>
-  <div class="row">
-    <div class="col-md-4 mb-4" *ngFor="let s of servicos">
-      <div class="card h-100 shadow-sm border-0" style="background-color: var(--creme-suave);">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title fw-bold" style="color: var(--verde-escuro);">{{ s.nome }}</h5>
-          <p class="card-text text-muted">{{ s.descricao }}</p>
-          <p class="fw-bold fs-5 mt-auto text-success">R$ {{ s.preco.toFixed(2) }}</p>
-          <button class="btn text-white w-100 fw-bold mt-2" style="background-color: var(--verde-oliva);" (click)="adicionarServico(s)">
-            Agendar / Adicionar
-          </button>
-        </div>
+
+  <h3 style="margin-top: 20px;">Serviços</h3>
+  <div id="lista-servicos">
+    @for (serv of servicos; track serv.iditem) {
+      <div class="item-catalogo item-servico">
+        <span class="dados-item">
+          <strong>{{ serv.iditemNavigation?.item1 || 'Serviço' }}</strong> - 
+          {{ serv.iditemNavigation?.descricaoItem || 'Serviço de estética' }} - 
+          R$ {{ (serv.precoVenda || serv.iditemNavigation?.preco || 0) | number:'1.2-2' }}
+        </span>
+        <span class="links-lista">
+          <a class="lnk-agendar" (click)="agendarServico(serv)"> Agendar </a>
+        </span>
       </div>
-    </div>
+    } @empty {
+      <div class="div-item-vazio">
+        NENHUM SERVIÇO NO CATÁLOGO 
+      </div>
+    }
   </div>
 </div>
