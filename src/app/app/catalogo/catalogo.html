@@ -1,19 +1,18 @@
-<div id="div-lista">
+<div id="div-lista" style="padding: 20px;">
   <h2>Catálogo Maravilhosas Estética</h2>
 
-
+  <!-- SEÇÃO DE PRODUTOS -->
   <h3>Produtos</h3>
   <div id="lista-produtos">
-    @for (prod of produtos; track prod.iditem) {
-      <div class="item-catalogo">
+    @for (prod of produtos; track (prod.iditem || $index)) {
+      <div class="item-catalogo" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff;">
         <span class="dados-item">
-          <strong>{{ prod.iditemNavigation?.item1 || 'Produto' }}</strong> - 
-          {{ prod.iditemNavigation?.descricaoItem || 'Sem descrição' }} - 
-          R$ {{ (prod.precoVenda || prod.iditemNavigation?.preco || 0) | number:'1.2-2' }}
-          @if (prod.unidade) { ({{ prod.unidade }}) }
+          <strong>{{ prod.iditemNavigation?.item1 || prod.item1 || 'Produto' }}</strong> - 
+          {{ prod.iditemNavigation?.descricaoItem || prod.descricaoItem || 'Sem descrição' }} - 
+          R$ {{ (prod.precoVenda || prod.preco || prod.iditemNavigation?.preco || 0) | number:'1.2-2' }}
         </span>
-        <span class="links-lista">
-          <a class="lnk-adicionar" (click)="adicionarAoCarrinho(prod)"> Adicionar </a>
+        <span class="links-lista" style="margin-left: 10px;">
+          <button (click)="adicionarAoCarrinho(prod)">Adicionar</button>
         </span>
       </div>
     } @empty {
@@ -26,20 +25,21 @@
 
   <h3 style="margin-top: 20px;">Serviços</h3>
   <div id="lista-servicos">
-    @for (serv of servicos; track serv.iditem) {
-      <div class="item-catalogo item-servico">
+    @for (serv of servicos; track (serv.id || $index)) {
+      <div class="item-catalogo item-servico" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff;">
         <span class="dados-item">
-          <strong>{{ serv.iditemNavigation?.item1 || 'Serviço' }}</strong> - 
-          {{ serv.iditemNavigation?.descricaoItem || 'Serviço de estética' }} - 
-          R$ {{ (serv.precoVenda || serv.iditemNavigation?.preco || 0) | number:'1.2-2' }}
+          <strong>{{ serv.nome || serv.iditemNavigation?.item1 || 'Serviço' }}</strong> - 
+          {{ serv.descricao || serv.iditemNavigation?.descricaoItem || 'Sem descrição' }} - 
+          R$ {{ serv.preco | number:'1.2-2' }}
+          @if (serv.duracaoMinutos) { <span>({{ serv.duracaoMinutos }} min)</span> }
         </span>
-        <span class="links-lista">
-          <a class="lnk-agendar" (click)="agendarServico(serv)"> Agendar </a>
+        <span class="links-lista" style="margin-left: 10px;">
+          <button (click)="agendarServico(serv)">Agendar</button>
         </span>
       </div>
     } @empty {
       <div class="div-item-vazio">
-        NENHUM SERVIÇO NO CATÁLOGO 
+        NENHUM SERVIÇO NO CATÁLOGO
       </div>
     }
   </div>

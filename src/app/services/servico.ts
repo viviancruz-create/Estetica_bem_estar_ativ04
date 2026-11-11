@@ -23,7 +23,7 @@ export interface ServicoDTO {
   providedIn: 'root'
 })
 export class ServicoService {
-  private apiUrl = 'https://localhost:7077/api/ProdutoItem';
+  private apiUrl = 'https://localhost:7077/api/Servico';
 
   constructor(private http: HttpClient) {}
 
