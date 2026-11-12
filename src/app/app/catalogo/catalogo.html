@@ -1,45 +1,83 @@
 <div id="div-lista" style="padding: 20px;">
   <h2>Catálogo Maravilhosas Estética</h2>
 
-  <!-- SEÇÃO DE PRODUTOS -->
+  <!-- 1. CAMPO DE PESQUISA POR NOME -->
+  <div style="margin-bottom: 15px;">
+    <input 
+      type="text" 
+      placeholder="Pesquisar por nome..." 
+      [(ngModel)]="termoBusca" 
+      (input)="aplicarFiltros()"
+      style="padding: 8px; width: 100%; max-width: 400px; border: 1px solid #ccc; border-radius: 4px;"
+    />
+  </div>
+
+  <!-- 2. MENU / LINKS DE CATEGORIAS -->
+  <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <strong>Categorias:</strong>
+    @for (cat of categorias; track cat) {
+      <a 
+        (click)="filtrarPorCategoria(cat)" 
+        style="cursor: pointer; text-decoration: underline; color: #d63384; font-weight: bold;"
+        [style.color]="categoriaSelecionada === cat ? '#800040' : '#d63384'">
+        {{ cat }}
+      </a>
+      <span>|</span>
+    }
+  </div>
+
+
   <h3>Produtos</h3>
   <div id="lista-produtos">
-    @for (prod of produtos; track (prod.iditem || $index)) {
-      <div class="item-catalogo" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff;">
+    @for (prod of produtosExibidos; track (prod.iditem || $index)) {
+      <div class="item-catalogo" style="padding: 12px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff; border-radius: 5px;">
         <span class="dados-item">
-          <strong>{{ prod.iditemNavigation?.item1 || prod.item1 || 'Produto' }}</strong> - 
-          {{ prod.iditemNavigation?.descricaoItem || prod.descricaoItem || 'Sem descrição' }} - 
-          R$ {{ (prod.precoVenda || prod.preco || prod.iditemNavigation?.preco || 0) | number:'1.2-2' }}
+          <strong>{{ prod.iditemNavigation?.item1 || prod.item1 || 'Produto' }}</strong> 
+          <span style="font-size: 0.85em; background: #eee; padding: 2px 6px; border-radius: 3px; margin-left: 5px;">
+            {{ prod.iditemNavigation?.nomeCategoria || 'Estética' }}
+          </span>
+          <br>
+          <small>{{ prod.iditemNavigation?.descricaoItem || prod.descricaoItem || 'Sem descrição' }}</small>
+          <br>
+          <strong>R$ {{ (prod.precoVenda || prod.preco || prod.iditemNavigation?.preco || 0) | number:'1.2-2' }}</strong>
+          <span style="color: green; margin-left: 10px;">✔ Disponível</span>
         </span>
-        <span class="links-lista" style="margin-left: 10px;">
-          <button (click)="adicionarAoCarrinho(prod)">Adicionar</button>
-        </span>
+        <div style="margin-top: 8px;">
+          <button (click)="adicionarAoCarrinho(prod)" style="background-color: #d63384; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+            Adicionar ao Carrinho
+          </button>
+        </div>
       </div>
     } @empty {
       <div class="div-item-vazio">
-        NENHUM PRODUTO NO CATÁLOGO
+        NENHUM PRODUTO ENCONTRADO
       </div>
     }
   </div>
 
 
-  <h3 style="margin-top: 20px;">Serviços</h3>
+  <h3 style="margin-top: 25px;">Serviços</h3>
   <div id="lista-servicos">
-    @for (serv of servicos; track (serv.id || $index)) {
-      <div class="item-catalogo item-servico" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff;">
+    @for (serv of servicosExibidos; track (serv.id || $index)) {
+      <div class="item-catalogo item-servico" style="padding: 12px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff; border-radius: 5px;">
         <span class="dados-item">
-          <strong>{{ serv.nome || serv.iditemNavigation?.item1 || 'Serviço' }}</strong> - 
-          {{ serv.descricao || serv.iditemNavigation?.descricaoItem || 'Sem descrição' }} - 
-          R$ {{ serv.preco | number:'1.2-2' }}
+          <strong>{{ serv.nome }}</strong>
+          <br>
+          <small>{{ serv.descricao }}</small>
+          <br>
+          <strong>R$ {{ serv.preco | number:'1.2-2' }}</strong>
           @if (serv.duracaoMinutos) { <span>({{ serv.duracaoMinutos }} min)</span> }
+          <span style="color: green; margin-left: 10px;">✔ Ativo</span>
         </span>
-        <span class="links-lista" style="margin-left: 10px;">
-          <button (click)="agendarServico(serv)">Agendar</button>
-        </span>
+        <div style="margin-top: 8px;">
+          <button (click)="agendarServico(serv)" style="background-color: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+            Agendar Serviço
+          </button>
+        </div>
       </div>
     } @empty {
       <div class="div-item-vazio">
-        NENHUM SERVIÇO NO CATÁLOGO
+        NENHUM SERVIÇO ENCONTRADO
       </div>
     }
   </div>
