@@ -13,6 +13,18 @@ export interface ItemCarrinho {
 })
 export class CarrinhoService {
   private itens: ItemCarrinho[] = [];
+  private readonly STORAGE_KEY = 'carrinho_maravilhosas';
+
+  constructor() {
+    const dadosSalvos = localStorage.getItem(this.STORAGE_KEY);
+    if (dadosSalvos) {
+      this.itens = JSON.parse(dadosSalvos);
+    }
+  }
+
+  private salvarStorage(): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.itens));
+  }
 
   getItens(): ItemCarrinho[] {
     return this.itens;
@@ -25,10 +37,12 @@ export class CarrinhoService {
     } else {
       this.itens.push({ ...item, quantidade: 1 });
     }
+    this.salvarStorage();
   }
 
   removerItem(id: number, tipo: 'produto' | 'servico'): void {
     this.itens = this.itens.filter(i => !(i.id === id && i.tipo === tipo));
+    this.salvarStorage();
   }
 
   getTotal(): number {
@@ -37,5 +51,6 @@ export class CarrinhoService {
 
   limparCarrinho(): void {
     this.itens = [];
+    localStorage.removeItem(this.STORAGE_KEY);
   }
 }

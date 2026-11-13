@@ -1,27 +1,98 @@
-<div class="container my-4" style="max-width: 600px;">
-    <h2 class="text-center mb-4">Cadastro de Cliente</h2>
-  
-    <form (ngSubmit)="salvar()">
-      <div class="mb-3">
-        <label class="form-label">Nome Completo</label>
-        <input type="text" class="form-control" [(ngModel)]="cliente.nome" name="nome" required>
+<div class="container my-4" style="max-width: 650px; padding: 20px;">
+  <h2 class="text-center mb-4">Cadastro de Cliente — Maravilhosas Estética</h2>
+
+  <!-- ALERTAS DE ERRO OU SUCESSO -->
+  @if (mensagemErro) {
+    <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+      {{ mensagemErro }}
+    </div>
+  }
+
+  @if (mensagemSucesso) {
+    <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
+      {{ mensagemSucesso }}
+    </div>
+  }
+
+  <form (ngSubmit)="salvar()">
+    <!-- NOME -->
+    <div class="mb-3" style="margin-bottom: 12px;">
+      <label class="form-label"><strong>Nome Completo *</strong></label>
+      <input type="text" class="form-control" [(ngModel)]="cliente.nome" name="nome" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <!-- CPF E DATA DE NASCIMENTO -->
+    <div style="display: flex; gap: 15px; margin-bottom: 12px;">
+      <div style="flex: 1;">
+        <label class="form-label"><strong>CPF *</strong></label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.cpf" name="cpf" placeholder="Somente números" maxlength="14" required style="width: 100%; padding: 8px;">
       </div>
-  
-      <div class="mb-3">
-        <label class="form-label">E-mail</label>
-        <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" required>
+
+      <div style="flex: 1;">
+        <label class="form-label"><strong>Data de Nascimento *</strong></label>
+        <input type="date" class="form-control" [(ngModel)]="cliente.dataNascimento" name="dataNascimento" required style="width: 100%; padding: 8px;">
       </div>
-  
-      <div class="mb-3">
-        <label class="form-label">Telefone</label>
-        <input type="tel" class="form-control" [(ngModel)]="cliente.telefone" name="telefone">
+    </div>
+
+    <!-- SEXO E TELEFONE -->
+    <div style="display: flex; gap: 15px; margin-bottom: 12px;">
+      <div style="flex: 1;">
+        <label class="form-label"><strong>Sexo *</strong></label>
+        <select class="form-control" [(ngModel)]="cliente.sexo" name="sexo" required style="width: 100%; padding: 8px;">
+          <option value="">Selecione...</option>
+          <option value="F">Feminino</option>
+          <option value="M">Masculino</option>
+          <option value="O">Outro</option>
+        </select>
       </div>
-  
-      <div class="mb-3">
-        <label class="form-label">Cep</label>
-        <input type="cep" class="form-control" [(ngModel)]="cliente.cep" name="cep">
+
+      <div style="flex: 1;">
+        <label class="form-label"><strong>Telefone *</strong></label>
+        <input type="tel" class="form-control" [(ngModel)]="cliente.telefone" name="telefone" placeholder="(79) 99999-9999" required style="width: 100%; padding: 8px;">
       </div>
-  
-      <button type="submit" class="btn btn-primary w-100">Salvar Cadastro</button>
-    </form>
-  </div>
+    </div>
+
+    <!-- E-MAIL -->
+    <div class="mb-3" style="margin-bottom: 15px;">
+      <label class="form-label"><strong>E-mail *</strong></label>
+      <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" placeholder="exemplo@email.com" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <hr style="margin: 20px 0;">
+    <h4>Endereço</h4>
+
+    <!-- CEP E NÚMERO -->
+    <div style="display: flex; gap: 15px; margin-bottom: 12px;">
+      <div style="flex: 2;">
+        <label class="form-label"><strong>CEP *</strong></label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.cep" name="cep" placeholder="49000-000" maxlength="9" required style="width: 100%; padding: 8px;">
+      </div>
+
+      <div style="flex: 1;">
+        <label class="form-label"><strong>Número *</strong></label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.numero" name="numero" placeholder="Ex: 120" required style="width: 100%; padding: 8px;">
+      </div>
+    </div>
+
+    <!-- COMPLEMENTO -->
+    <div class="mb-3" style="margin-bottom: 20px;">
+      <label class="form-label"><strong>Complemento</strong></label>
+      <input type="text" class="form-control" [(ngModel)]="cliente.complemento" name="complemento" placeholder="Apartamento, bloco, ponto de referência..." style="width: 100%; padding: 8px;">
+    </div>
+
+    <!-- 3 AÇÕES PRINCIPAIS: SALVAR, LIMPAR E VOLTAR AO CATÁLOGO -->
+    <div style="display: flex; gap: 10px; justify-content: space-between;">
+      <button type="submit" style="flex: 1; background-color: #d63384; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        Salvar
+      </button>
+
+      <button type="button" (click)="limpar()" style="flex: 1; background-color: #6c757d; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        Limpar
+      </button>
+
+      <button type="button" (click)="voltarAoCatalogo()" style="flex: 1; background-color: #17a2b8; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        Voltar ao Catálogo
+      </button>
+    </div>
+  </form>
+</div>

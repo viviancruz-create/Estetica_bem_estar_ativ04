@@ -13,12 +13,12 @@
   </div>
 
   <!-- 2. MENU / LINKS DE CATEGORIAS -->
-  <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+  <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
     <strong>Categorias:</strong>
     @for (cat of categorias; track cat) {
       <a 
         (click)="filtrarPorCategoria(cat)" 
-        style="cursor: pointer; text-decoration: underline; color: #d63384; font-weight: bold;"
+        style="cursor: pointer; text-decoration: underline; font-weight: bold;"
         [style.color]="categoriaSelecionada === cat ? '#800040' : '#d63384'">
         {{ cat }}
       </a>
@@ -26,7 +26,7 @@
     }
   </div>
 
-
+  <!-- 3. SEÇÃO DE PRODUTOS -->
   <h3>Produtos</h3>
   <div id="lista-produtos">
     @for (prod of produtosExibidos; track (prod.iditem || $index)) {
@@ -40,7 +40,9 @@
           <small>{{ prod.iditemNavigation?.descricaoItem || prod.descricaoItem || 'Sem descrição' }}</small>
           <br>
           <strong>R$ {{ (prod.precoVenda || prod.preco || prod.iditemNavigation?.preco || 0) | number:'1.2-2' }}</strong>
-          <span style="color: green; margin-left: 10px;">✔ Disponível</span>
+          <span style="color: green; margin-left: 10px;">
+            ✔ Disponível @if (prod.unidade) { ({{ prod.unidade }}) }
+          </span>
         </span>
         <div style="margin-top: 8px;">
           <button (click)="adicionarAoCarrinho(prod)" style="background-color: #d63384; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
@@ -55,19 +57,22 @@
     }
   </div>
 
-
+  <!-- 4. SEÇÃO DE SERVIÇOS -->
   <h3 style="margin-top: 25px;">Serviços</h3>
   <div id="lista-servicos">
     @for (serv of servicosExibidos; track (serv.id || $index)) {
       <div class="item-catalogo item-servico" style="padding: 12px; border: 1px solid #ddd; margin-bottom: 10px; background-color: #fff; border-radius: 5px;">
         <span class="dados-item">
           <strong>{{ serv.nome }}</strong>
+          <span style="font-size: 0.85em; background: #eee; padding: 2px 6px; border-radius: 3px; margin-left: 5px;">
+            {{ serv.categoria || serv.nomeCategoria || 'Facial' }}
+          </span>
           <br>
           <small>{{ serv.descricao }}</small>
           <br>
           <strong>R$ {{ serv.preco | number:'1.2-2' }}</strong>
           @if (serv.duracaoMinutos) { <span>({{ serv.duracaoMinutos }} min)</span> }
-          <span style="color: green; margin-left: 10px;">✔ Ativo</span>
+          <span style="color: green; margin-left: 10px;">✔ Disponível</span>
         </span>
         <div style="margin-top: 8px;">
           <button (click)="agendarServico(serv)" style="background-color: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">

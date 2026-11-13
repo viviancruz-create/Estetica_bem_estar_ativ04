@@ -1,9 +1,8 @@
 export interface EntradaProduto {
     Identrada: number;
     Iditem: number;
-    DataEntradaProduto: string;
+    DataEntrada: string;
     QuantidadeEntrada: number;
-    Unidade: number;
-    ValorUnitarioEntrada: number;
+    ValorUnitario: number;
     
   }

@@ -1,8 +1,11 @@
 export interface AtendimentoItem {
     Idatendimento: number;
-    Iditem: number;
-    Idfuncionario: number;
-    QuantidadeItens: number;
-    ValorUnitarioEntrada: number;
+    IdItem: number;
+    Item: string;
+    IdFuncionario: number;
+    NomeFuncionario: string;
+    Cargo: string;
+    Quantidade: number;
+    ValorUnitario: number;
     
   }

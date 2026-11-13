@@ -1,13 +1,11 @@
 export interface Pedido {
     Idpessoa: number;
     Nome: string;
-    Cpf: string;
+    CPF: string;
     DataNascimento: number;
     Sexo: string;
     Email: string;
     Telefone: number;
-    Atedimentos: string;
     Enderecos: string;
-    Funcionario: string;
 
   }

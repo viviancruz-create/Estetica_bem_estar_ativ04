@@ -1,7 +1,6 @@
 export interface Endereco {
-    Idendereco: number;
     Idpessoa: number;
-    Cep: string;
+    CEP: string;
     Numero: number;
     Complemento: string;
     
