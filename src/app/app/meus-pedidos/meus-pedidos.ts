@@ -1,12 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface Pedido {
-  id: number;
-  data: string;
-  total: number;
-  status: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-meus-pedidos',
@@ -16,10 +11,48 @@ export interface Pedido {
   styleUrl: './meus-pedidos.css'
 })
 export class MeusPedidosComponent implements OnInit {
-  pedidos: Pedido[] = [
-    { id: 1001, data: '28/10/2026', total: 239.90, status: 'Concluído' },
-    { id: 1002, data: '25/10/2026', total: 150.00, status: 'Em Processamento' }
-  ];
+  pedidos: any[] = [];
+  carregando: boolean = true;
 
-  ngOnInit(): void {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.carregarPedidos();
+  }
+
+  carregarPedidos(): void {
+    const clienteSalvo = localStorage.getItem('cliente_logado');
+    const cliente = clienteSalvo ? JSON.parse(clienteSalvo) : null;
+    const idCliente = cliente ? (cliente.idPessoa || cliente.idpessoa) : null;
+
+    this.http.get<any[]>('https://localhost:7077/api/Atendimento').subscribe({
+      next: (dados) => {
+        if (idCliente) {
+          this.pedidos = dados.filter(p => p.idPessoa === idCliente);
+        } else {
+          this.pedidos = dados;
+        }
+        this.carregando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar pedidos:', err);
+        this.carregando = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  calcularTotal(itens: any[]): number {
+    if (!itens || itens.length === 0) return 0;
+    return itens.reduce((soma, i) => soma + (i.quantidade * i.valorUnitario), 0);
+  }
+
+  voltarCatalogo(): void {
+    this.router.navigate(['/catalogo']);
+  }
 }
