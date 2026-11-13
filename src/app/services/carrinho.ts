@@ -6,6 +6,7 @@ export interface ItemCarrinho {
   preco: number;
   quantidade: number;
   tipo: 'produto' | 'servico';
+  estoqueDisponivel?: number;
 }
 
 @Injectable({
@@ -33,10 +34,39 @@ export class CarrinhoService {
   adicionarItem(item: ItemCarrinho): void {
     const itemExistente = this.itens.find(i => i.id === item.id && i.tipo === item.tipo);
     if (itemExistente) {
+      if (itemExistente.tipo === 'produto' && itemExistente.estoqueDisponivel !== undefined) {
+        if (itemExistente.quantidade + 1 > itemExistente.estoqueDisponivel) {
+          alert(`Estoque máximo atingido (${itemExistente.estoqueDisponivel} disponíveis).`);
+          return;
+        }
+      }
       itemExistente.quantidade += 1;
     } else {
+      if (item.tipo === 'produto' && item.estoqueDisponivel !== undefined && item.estoqueDisponivel <= 0) {
+        alert('Produto sem estoque disponível no momento.');
+        return;
+      }
       this.itens.push({ ...item, quantidade: 1 });
     }
+    this.salvarStorage();
+  }
+
+  alterarQuantidade(id: number, tipo: 'produto' | 'servico', novaQuantidade: number): void {
+    const item = this.itens.find(i => i.id === id && i.tipo === tipo);
+    if (!item) return;
+
+    if (novaQuantidade <= 0) {
+      this.removerItem(id, tipo);
+      return;
+    }
+
+    if (tipo === 'produto' && item.estoqueDisponivel !== undefined && novaQuantidade > item.estoqueDisponivel) {
+      alert(`Quantidade indisponível! Estoque máximo: ${item.estoqueDisponivel}.`);
+      item.quantidade = item.estoqueDisponivel;
+    } else {
+      item.quantidade = novaQuantidade;
+    }
+
     this.salvarStorage();
   }
 

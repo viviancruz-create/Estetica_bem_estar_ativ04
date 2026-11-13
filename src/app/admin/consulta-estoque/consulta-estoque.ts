@@ -17,8 +17,8 @@ export interface EstoqueItem {
   selector: 'app-estoque',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './estoque.html',
-  styleUrls: ['./estoque.css']
+  templateUrl: './consulta-estoque.html',
+  styleUrls: ['./consulta-estoque.css']
 })
 export class EstoqueComponent implements OnInit {
   estoque: EstoqueItem[] = [];

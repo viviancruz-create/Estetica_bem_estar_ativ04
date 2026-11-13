@@ -6,44 +6,121 @@
     </button>
   </div>
 
-  <div *ngIf="carregando" class="alert alert-secondary">
-    Carregando seus pedidos...
+  <!-- IDENTIFICAÇÃO DO CLIENTE SEM SENHA (Quando não há sessão ativa) -->
+  <div *ngIf="!clienteIdentificado" class="card p-4 shadow-sm mx-auto" style="max-width: 480px;">
+    <h5 class="mb-2">Consultar Meus Pedidos</h5>
+    <p class="text-muted small mb-3">Informe seu CPF ou e-mail cadastrado para visualizar apenas os seus pedidos.</p>
+
+    <div *ngIf="mensagemErro" class="alert alert-danger py-2 small">
+      {{ mensagemErro }}
+    </div>
+
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="identificadorBusca"
+        placeholder="CPF ou E-mail..."
+        (keyup.enter)="identificarCliente()"
+      />
+    </div>
+
+    <div class="d-flex gap-2">
+      <button class="btn btn-success flex-grow-1" (click)="identificarCliente()" [disabled]="carregando">
+        {{ carregando ? 'Consultando...' : 'Acessar Pedidos' }}
+      </button>
+      <a class="btn btn-outline-primary" routerLink="/cadastro-cliente">
+        Cadastrar
+      </a>
+    </div>
   </div>
 
-  <div *ngIf="!carregando && pedidos.length === 0" class="alert alert-info">
-    Você ainda não realizou nenhum pedido.
-  </div>
+  <!-- ÁREA LOGADA / IDENTIFICADA DO CLIENTE -->
+  <div *ngIf="clienteIdentificado">
+    <div class="alert alert-light border d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <strong>Cliente:</strong> {{ clienteIdentificado.nome }}
+        <span class="text-muted small ms-2">({{ clienteIdentificado.email }})</span>
+      </div>
+      <button class="btn btn-outline-danger btn-sm" (click)="trocarCliente()">
+        Sair / Trocar Cliente
+      </button>
+    </div>
 
-  <div *ngIf="!carregando && pedidos.length > 0" class="table-responsive shadow-sm rounded">
-    <table class="table table-striped align-middle mb-0">
-      <thead>
-        <tr>
-          <th>Nº do Pedido</th>
-          <th>Data</th>
-          <th>Itens</th>
-          <th>Total</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let pedido of pedidos">
-          <td class="fw-bold">#{{ pedido.idAtendimento }}</td>
-          <td>{{ pedido.dataAtendimento | date:'dd/MM/yyyy' }}</td>
-          <td>
-            <ul class="list-unstyled mb-0 small">
-              <li *ngFor="let item of pedido.itens">
-                {{ item.quantidade }}x {{ item.item }} (R$ {{ item.valorUnitario.toFixed(2) }})
-              </li>
-            </ul>
-          </td>
-          <td class="fw-bold">R$ {{ calcularTotal(pedido.itens).toFixed(2) }}</td>
-          <td>
-            <span class="badge" [ngClass]="pedido.statusAtendimento === 'Confirmado' || pedido.statusAtendimento === 'Concluído' ? 'bg-success' : 'bg-warning text-dark'">
-              {{ pedido.statusAtendimento }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="carregando" class="alert alert-secondary">
+      Carregando seus pedidos...
+    </div>
+
+    <div *ngIf="!carregando && pedidos.length === 0" class="alert alert-info">
+      Você ainda não realizou nenhum pedido.
+    </div>
+
+    <!-- TABELA DE PEDIDOS ANTERIORES -->
+    <div *ngIf="!carregando && pedidos.length > 0" class="table-responsive shadow-sm rounded mb-4">
+      <table class="table table-hover align-middle mb-0 bg-white">
+        <thead class="table-light">
+          <tr>
+            <th>Nº do Pedido</th>
+            <th>Data</th>
+            <th>Valor Total</th>
+            <th>Situação</th>
+            <th class="text-center">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidos" [class.table-active]="pedidoSelecionado?.idAtendimento === pedido.idAtendimento">
+            <td class="fw-bold">#{{ pedido.idAtendimento }}</td>
+            <td>{{ pedido.dataAtendimento | date:'dd/MM/yyyy' }}</td>
+            <td class="fw-bold">R$ {{ calcularTotal(pedido.itens).toFixed(2) }}</td>
+            <td>
+              <span class="badge" [ngClass]="pedido.statusAtendimento === 'Confirmado' || pedido.statusAtendimento === 'Concluído' ? 'bg-success' : 'bg-warning text-dark'">
+                {{ pedido.statusAtendimento }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-primary" (click)="selecionarPedido(pedido)">
+                {{ pedidoSelecionado?.idAtendimento === pedido.idAtendimento ? 'Fechar Detalhes' : 'Ver Itens' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DETALHES DO PEDIDO SELECIONADO -->
+    <div *ngIf="pedidoSelecionado" class="card shadow-sm border-primary">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <strong>Itens do Pedido #{{ pedidoSelecionado.idAtendimento }} ({{ pedidoSelecionado.dataAtendimento | date:'dd/MM/yyyy' }})</strong>
+        <button class="btn btn-sm btn-light" (click)="pedidoSelecionado = null">Fechar</button>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-sm align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-3">Item</th>
+              <th class="text-center">Quantidade</th>
+              <th class="text-end">Preço Unitário</th>
+              <th class="text-end pe-3">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pedidoSelecionado.itens">
+              <td class="ps-3">{{ item.item }}</td>
+              <td class="text-center">{{ item.quantidade }}</td>
+              <td class="text-end">R$ {{ item.valorUnitario.toFixed(2) }}</td>
+              <td class="text-end pe-3 fw-bold">R$ {{ (item.quantidade * item.valorUnitario).toFixed(2) }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="table-light">
+              <td colspan="3" class="text-end fw-bold">Total do Pedido:</td>
+              <td class="text-end pe-3 fw-bold text-success">
+                R$ {{ calcularTotal(pedidoSelecionado.itens).toFixed(2) }}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
