@@ -26,7 +26,7 @@ export class EstoqueComponent implements OnInit {
   filtro: string = '';
 
   // Ajuste a porta da sua API C# conforme necessário
-  private apiUrl = 'https://localhost:7123/api/Estoque'; 
+  private apiUrl = 'https://localhost:7077/api/ProdutoItem'; 
 
   constructor(private http: HttpClient) {}
 
